@@ -1,0 +1,47 @@
+{
+  "template": "https://github.com/nekeal/cookiecutter-python-package",
+  "commit": "5ce8cdcdf6b14e216a450efd12e888019856616c",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "author_name": "nekeal",
+      "author_email": "szymon.sc.cader@gmail.com",
+      "github_username": "nekeal",
+      "project_name": "dd-python",
+      "project_slug": "dd-python",
+      "package_name": "smartschedule",
+      "project_short_description": "Python implementation of Domain Drivers course",
+      "python_version": "3.11+",
+      "_python_version_specs": {
+        "3.8+": {
+          "versions": [
+            "3.8",
+            "3.9",
+            "3.10",
+            "3.11"
+          ]
+        },
+        "3.9+": {
+          "versions": [
+            "3.9",
+            "3.10",
+            "3.11"
+          ]
+        },
+        "3.10+": {
+          "versions": [
+            "3.10",
+            "3.11"
+          ]
+        },
+        "3.11+": {
+          "versions": [
+            "3.11"
+          ]
+        }
+      },
+      "_template": "https://github.com/nekeal/cookiecutter-python-package"
+    }
+  },
+  "directory": null
+}
