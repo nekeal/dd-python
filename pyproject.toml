@@ -117,7 +117,13 @@ exclude_lines = [
 # Avoid changing this!
 strict = true  # See all the enabled flags `mypy --help | grep -A 10 'Strict mode'`
 disallow_any_unimported = true
+# exclude tests
 
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+]
+disallow_untyped_defs = false
 # If you need to ignore something for some specific module,
 # add overrides for them. Avoid changing the global config!
 # For example:
