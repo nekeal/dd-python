@@ -4,7 +4,7 @@ from datetime import timedelta
 from typing import Any, Self
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ResourceName:
     name: str
 
@@ -12,16 +12,24 @@ class ResourceName:
 @dataclasses.dataclass
 class Stage:
     name: str
-    dependencies: set[Self] = dataclasses.field(default_factory=set, init=False)
-    resources: set[ResourceName] = dataclasses.field(default_factory=set, init=False)
-    duration: timedelta = dataclasses.field(default=timedelta(), init=False)
+    dependencies: set["Stage"] = dataclasses.field(default_factory=set)
+    resources: set[ResourceName] = dataclasses.field(default_factory=set)
+    duration: timedelta = dataclasses.field(default=timedelta())
 
     def depends_on(self, stage: Self | Iterable[Self]) -> Self:
+        new_dependencies = self.dependencies.copy()
         if isinstance(stage, Iterable):
-            self.dependencies.update(stage)
+            new_dependencies.update(stage)
         else:
-            self.dependencies.add(stage)
-        return self
+            new_dependencies.add(stage)
+        return self.__class__(
+            self.name, new_dependencies, self.resources, self.duration
+        )
+
+    def with_chosen_resource_capabilities(self, *resources: ResourceName) -> Self:
+        return self.__class__(
+            self.name, self.dependencies, set(resources), self.duration
+        )
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, self.__class__):
