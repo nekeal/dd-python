@@ -6,10 +6,10 @@ from smartschedule.sorter.nodes import Nodes
 class TestGraphTopologicalSort:
     def test_topological_sort_with_simple_dependencies(self):
         # Given
-        node1 = Node("Node1")
-        node2 = Node("Node2")
-        node3 = Node("Node3")
-        node4 = Node("Node4")
+        node1: Node[str] = Node("Node1")
+        node2: Node[str] = Node("Node2")
+        node3: Node[str] = Node("Node3")
+        node4: Node[str] = Node("Node4")
         node2 = node2.depends_on(node1)
         node3 = node3.depends_on(node1)
         node4 = node4.depends_on(node2)
@@ -28,11 +28,11 @@ class TestGraphTopologicalSort:
 
     def test_topological_sort_with_linear_dependencies(self):
         # Given
-        node1 = Node("Node1")
-        node2 = Node("Node2")
-        node3 = Node("Node3")
-        node4 = Node("Node4")
-        node5 = Node("Node5")
+        node1: Node[str] = Node("Node1")
+        node2: Node[str] = Node("Node2")
+        node3: Node[str] = Node("Node3")
+        node4: Node[str] = Node("Node4")
+        node5: Node[str] = Node("Node5")
         node1 = node1.depends_on(node2)
         node2 = node2.depends_on(node3)
         node3 = node3.depends_on(node4)
@@ -53,8 +53,8 @@ class TestGraphTopologicalSort:
 
     def test_nodes_without_dependencies(self):
         # Given
-        node1 = Node("Node1")
-        node2 = Node("Node2")
+        node1: Node[str] = Node("Node1")
+        node2: Node[str] = Node("Node2")
         nodes = Nodes({node1, node2})
 
         # When
@@ -65,8 +65,8 @@ class TestGraphTopologicalSort:
 
     def test_cyclic_dependency(self):
         # Given
-        node1 = Node("Node1")
-        node2 = Node("Node2")
+        node1: Node[str] = Node("Node1")
+        node2: Node[str] = Node("Node2")
         node2 = node2.depends_on(node1)
         node1 = node1.depends_on(node2)  # making it cyclic
         nodes = Nodes({node1, node2})

@@ -13,5 +13,5 @@ class StageParallelization:
     def of(self, stages: set[Stage]) -> ParallelStagesList:
         """Parallelize the given stages."""
         nodes = StagesToNodes().calculate(list(stages))
-        sorted_nodes = GraphTopologicalSort().sort(nodes)
+        sorted_nodes = GraphTopologicalSort[Stage]().sort(nodes)
         return SortedNodesToParallelizedStages().calculate(sorted_nodes)

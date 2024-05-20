@@ -10,7 +10,7 @@ class StagesToNodes:
     """
 
     @staticmethod
-    def calculate(stages: list[Stage]) -> Nodes:
+    def calculate(stages: list[Stage]) -> Nodes[Stage]:
         """
         This method takes a list of Stage objects and returns a Nodes object.
         It creates a dictionary where the keys are the names of the stages and the
@@ -34,8 +34,8 @@ class StagesToNodes:
 
     @staticmethod
     def shared_resources(
-        stage: Stage, with_stages: list[Stage], result: dict[str, Node]
-    ) -> dict[str, Node]:
+        stage: Stage, with_stages: list[Stage], result: dict[str, Node[Stage]]
+    ) -> dict[str, Node[Stage]]:
         """
         This method updates the dependencies of the node corresponding to
         the current stage based on the shared resources with other stages.
@@ -65,7 +65,9 @@ class StagesToNodes:
         return result
 
     @staticmethod
-    def explicit_dependencies(stage: Stage, result: dict[str, Node]) -> dict[str, Node]:
+    def explicit_dependencies(
+        stage: Stage, result: dict[str, Node[Stage]]
+    ) -> dict[str, Node[Stage]]:
         """
         This method updates the dependencies of the node corresponding to
         the current stage based on the explicit dependencies of the stage.

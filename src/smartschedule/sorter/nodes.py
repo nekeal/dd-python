@@ -6,16 +6,18 @@ from typing import Any
 if typing.TYPE_CHECKING:
     from smartschedule.sorter.node import Node
 
+T = typing.TypeVar("T")
+
 
 @dataclass(frozen=True)
-class Nodes:
-    nodes: set["Node"] = field(default_factory=set)
+class Nodes(typing.Generic[T]):
+    nodes: set["Node[T]"] = field(default_factory=set)
 
     @property
-    def all(self) -> frozenset["Node"]:
+    def all(self) -> frozenset["Node[T]"]:
         return frozenset(self.nodes)
 
-    def add(self, node: "Node") -> "Nodes":
+    def add(self, node: "Node[T]") -> "Nodes[T]":
         """
         Add a node to the set of nodes.
         Args:
@@ -25,7 +27,9 @@ class Nodes:
         """
         return Nodes(self.nodes.union({node}))
 
-    def with_all_dependencies_present_in(self, nodes: Iterable["Node"]) -> "Nodes":
+    def with_all_dependencies_present_in(
+        self, nodes: Iterable["Node[T]"]
+    ) -> "Nodes[T]":
         """
         Filter out nodes that have all dependencies present in the given set.
         Args:
@@ -36,7 +40,7 @@ class Nodes:
         nodes_set = set(nodes)
         return Nodes({n for n in self.nodes if n.dependencies.nodes <= nodes_set})
 
-    def remove_all(self, nodes: set["Node"] | frozenset["Node"]) -> "Nodes":
+    def remove_all(self, nodes: set["Node[T]"] | frozenset["Node[T]"]) -> "Nodes[T]":
         """
         Remove a set of nodes from the current set of nodes.
         Args:

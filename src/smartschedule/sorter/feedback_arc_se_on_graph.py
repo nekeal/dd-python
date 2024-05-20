@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .node import Node
+from smartschedule.sorter.node import Node
 
 
 @dataclass
@@ -16,7 +16,7 @@ class FeedbackArcSetOnGraph:
     """
 
     @staticmethod
-    def calculate(initial_nodes: list[Node]) -> list[Edge]:
+    def calculate(initial_nodes: list[Node[str]]) -> list[Edge]:
         """
         This method calculates the feedback edges in a graph
         represented by the given list of nodes.
@@ -41,7 +41,7 @@ class FeedbackArcSetOnGraph:
         return feedback_edges
 
     @staticmethod
-    def create_adjacency_list(initial_nodes: list[Node]) -> dict[int, list[int]]:
+    def create_adjacency_list(initial_nodes: list[Node[str]]) -> dict[int, list[int]]:
         adjacency_list: dict[int, list[int]] = {
             i: [] for i in range(1, len(initial_nodes) + 1)
         }

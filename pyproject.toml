@@ -39,6 +39,7 @@ pytest-github-actions-annotate-failures = "*"
 pytest-cov = "*"
 python-kacl = "*"
 ruff = "*"
+import-linter = "^2.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -139,3 +140,14 @@ disallow_untyped_defs = false
 #   "tests/my_thing/test_my_thing",
 # ]
 # disallow_untyped_defs = false
+
+[tool.importlinter]
+root_package = "smartschedule"
+
+[[tool.importlinter.contracts]]
+name = "Layered architecture"
+type = "layers"
+layers = [
+    "smartschedule.planning.parallelization",
+    "smartschedule.sorter",
+]

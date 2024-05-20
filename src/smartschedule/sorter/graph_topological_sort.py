@@ -1,18 +1,22 @@
-from .nodes import Nodes
-from .sorted_nodes import SortedNodes
+from typing import Generic, TypeVar
+
+from smartschedule.sorter.nodes import Nodes
+from smartschedule.sorter.sorted_nodes import SortedNodes
+
+T = TypeVar("T")
 
 
-class GraphTopologicalSort:
+class GraphTopologicalSort(Generic[T]):
     @staticmethod
-    def sort(nodes: Nodes) -> SortedNodes:
+    def sort(nodes: Nodes[T]) -> SortedNodes[T]:
         return GraphTopologicalSort.create_sorted_nodes_recursively(
             nodes, SortedNodes()
         )
 
     @staticmethod
     def create_sorted_nodes_recursively(
-        remaining_nodes: Nodes, accumulated_sorted_nodes: SortedNodes
-    ) -> SortedNodes:
+        remaining_nodes: Nodes[T], accumulated_sorted_nodes: SortedNodes[T]
+    ) -> SortedNodes[T]:
         already_processed_nodes = [
             node
             for sorted_nodes in accumulated_sorted_nodes.all
