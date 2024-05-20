@@ -45,10 +45,3 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: poetry run pytest
-
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/python-poetry-env
-      - run: poetry run mkdocs build
