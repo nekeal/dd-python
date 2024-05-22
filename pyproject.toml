@@ -68,6 +68,8 @@ ignore = [
     # Unfortunately, exceptions are hardcoded in bugbear.
     # https://github.com/PyCQA/flake8-bugbear/issues/62
     "B008",
+    "A001", # builtin-variable-shadowing
+    "A002", # builtin-argument-shadowing
 ]
 select = [
     "A", # flake8 builtins
