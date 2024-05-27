@@ -151,5 +151,7 @@ name = "Layered architecture"
 type = "layers"
 layers = [
     "smartschedule.planning.parallelization",
-    "smartschedule.sorter | smartschedule.simulation",
+    "smartschedule.simulation",
+    "smartschedule.sorter | smartschedule.optimization"
+
 ]

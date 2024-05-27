@@ -1,5 +1,7 @@
 import uuid
 
+from smartschedule.optimization.optimization_facade import OptimizationFacade
+from smartschedule.shared.time_slot import TimeSlot
 from smartschedule.simulation.available_resource_capability import (
     AvailableResourceCapability,
 )
@@ -7,7 +9,6 @@ from smartschedule.simulation.capability import Capability
 from smartschedule.simulation.demand import Demand
 from smartschedule.simulation.project_id import ProjectId
 from smartschedule.simulation.simulation_facade import SimulationFacade
-from smartschedule.simulation.time_slot import TimeSlot
 
 from tests.simulation.available_capabilities_builder import AvailableCapabilitiesBuilder
 from tests.simulation.simulated_projects_builder import SimulatedProjectsBuilder
@@ -21,7 +22,7 @@ class TestSimulationScenarios:
     STASZEK = uuid.uuid4()
     LEON = uuid.uuid4()
 
-    simulation_facade = SimulationFacade()
+    simulation_facade = SimulationFacade(OptimizationFacade())
 
     def test_picks_optimal_project_based_on_earnings(self):
         simulated_projects = (
@@ -54,7 +55,7 @@ class TestSimulationScenarios:
         )
 
         assert result.profit == 108
-        assert len(result.chosen_projects) == 2
+        assert len(result.chosen_items) == 2
 
     def test_picks_all_when_enough_capabilities(self):
         simulated_projects = (
@@ -81,7 +82,7 @@ class TestSimulationScenarios:
         )
 
         assert result.profit == 99
-        assert len(result.chosen_projects) == 1
+        assert len(result.chosen_items) == 1
 
     def test_can_simulate_having_extra_resources(self):
         simulated_projects = (
