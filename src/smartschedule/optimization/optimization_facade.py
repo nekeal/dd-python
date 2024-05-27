@@ -1,5 +1,7 @@
-from collections.abc import Sequence
+import math
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from functools import cmp_to_key
 
 from smartschedule.optimization.capacity_dimension import CapacityDimension
 from smartschedule.optimization.item import Item
@@ -8,9 +10,19 @@ from smartschedule.optimization.total_capacity import TotalCapacity
 from smartschedule.optimization.total_weight import TotalWeight
 
 
+def compare_item_value_reversed(a: Item, b: Item) -> int:
+    return int(math.copysign(1, b.value - a.value))
+
+
 @dataclass
 class OptimizationFacade:
-    def calculate(self, items: list[Item], total_capacity: TotalCapacity) -> Result:
+    def calculate(
+        self,
+        items: list[Item],
+        total_capacity: TotalCapacity,
+        comparator: Callable[[Item, Item], int] | None = None,
+    ) -> Result:
+        _comparator = comparator or compare_item_value_reversed
         capacities_size = total_capacity.size()
         dp = [0.0] * (capacities_size + 1)
         chosen_items_list: list[list[Item]] = [[] for _ in range(capacities_size + 1)]
@@ -24,7 +36,7 @@ class OptimizationFacade:
         all_capacities = total_capacity.capacities
         item_to_capacities_map: dict[Item, set[CapacityDimension]] = {}
 
-        for item in sorted(items, key=lambda x: x.value, reverse=True):
+        for item in sorted(items, key=cmp_to_key(_comparator)):
             chosen_capacities = self.match_capacities(item.total_weight, all_capacities)
             all_capacities = [
                 cap for cap in all_capacities if cap not in chosen_capacities

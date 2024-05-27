@@ -122,6 +122,32 @@ class TestSimulationScenarios:
         assert result_without_extra_resource.profit == 99
         assert result_with_extra_resource.profit == 108
 
+    def test_picks_optimal_project_based_on_reputation(self):
+        simulated_projects = (
+            self.simulated_projects()
+            .with_project(self.PROJECT_1)
+            .that_requires(Demand.demand_for(Capability.skill("JAVA-MID"), self.JAN_1))
+            .that_can_generate_reputation_loss(100)
+            .with_project(self.PROJECT_2)
+            .that_requires(Demand.demand_for(Capability.skill("JAVA-MID"), self.JAN_1))
+            .that_can_generate_reputation_loss(40)
+            .build()
+        )
+
+        simulated_availability = (
+            self.simulated_capabilities()
+            .with_employee(self.STASZEK)
+            .that_brings(Capability.skill("JAVA-MID"))
+            .that_is_available_at(self.JAN_1)
+            .build()
+        )
+
+        result = self.simulation_facade.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(  # noqa E501
+            simulated_projects, simulated_availability
+        )
+
+        assert str(self.PROJECT_1) == result.chosen_items[0].name
+
     @staticmethod
     def simulated_projects() -> SimulatedProjectsBuilder:
         return SimulatedProjectsBuilder()

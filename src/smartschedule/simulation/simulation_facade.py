@@ -1,3 +1,4 @@
+import math
 from dataclasses import dataclass
 
 from smartschedule.optimization.item import Item
@@ -7,6 +8,10 @@ from smartschedule.optimization.total_capacity import TotalCapacity
 from smartschedule.optimization.total_weight import TotalWeight
 from smartschedule.simulation.simulated_capabilities import SimulatedCapabilities
 from smartschedule.simulation.simulated_project import SimulatedProject
+
+
+def reversed_comparator(a: Item, b: Item) -> int:
+    return int(math.copysign(1, b.value - a.value))
 
 
 @dataclass
@@ -19,7 +24,9 @@ class SimulationFacade:
         total_capability: SimulatedCapabilities,
     ) -> Result:
         return self.optimization_facade.calculate(
-            self.to_items(projects_simulations), self.to_capacity(total_capability)
+            self.to_items(projects_simulations),
+            self.to_capacity(total_capability),
+            reversed_comparator,
         )
 
     @staticmethod
@@ -40,6 +47,6 @@ class SimulationFacade:
         weights = tuple(missing_demands)
         return Item(
             str(simulated_project.project_id),
-            float(simulated_project.earnings),
+            float(simulated_project.calculate_value()),
             TotalWeight(weights),
         )
