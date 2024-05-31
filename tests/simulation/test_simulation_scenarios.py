@@ -2,6 +2,9 @@ import uuid
 
 from smartschedule.optimization.optimization_facade import OptimizationFacade
 from smartschedule.shared.time_slot import TimeSlot
+from smartschedule.simulation.additional_priced_capability import (
+    AdditionalPricedCapability,
+)
 from smartschedule.simulation.available_resource_capability import (
     AvailableResourceCapability,
 )
@@ -147,6 +150,54 @@ class TestSimulationScenarios:
         )
 
         assert str(self.PROJECT_1) == result.chosen_items[0].name
+
+    def test_check_if_it_pays_off_to_pay_for_capability(self):
+        # given
+        simulated_projects = (
+            self.simulated_projects()
+            .with_project(self.PROJECT_1)
+            .that_requires(Demand.demand_for(Capability.skill("JAVA-MID"), self.JAN_1))
+            .that_can_earn(100)
+            .with_project(self.PROJECT_2)
+            .that_requires(Demand.demand_for(Capability.skill("JAVA-MID"), self.JAN_1))
+            .that_can_earn(40)
+            .build()
+        )
+
+        # and there are
+        simulated_availability = (
+            self.simulated_capabilities()
+            .with_employee(self.STASZEK)
+            .that_brings(Capability.skill("JAVA-MID"))
+            .that_is_available_at(self.JAN_1)
+            .build()
+        )
+
+        # and there are
+        slawek = AdditionalPricedCapability(
+            9999,
+            AvailableResourceCapability(
+                uuid.uuid4(), Capability.skill("JAVA-MID"), self.JAN_1
+            ),
+        )
+        staszek = AdditionalPricedCapability(
+            3,
+            AvailableResourceCapability(
+                uuid.uuid4(), Capability.skill("JAVA-MID"), self.JAN_1
+            ),
+        )
+
+        # when
+        buying_slawek = self.simulation_facade.profit_after_buying_new_capability(
+            simulated_projects, simulated_availability, slawek
+        )
+        buying_staszek = self.simulation_facade.profit_after_buying_new_capability(
+            simulated_projects, simulated_availability, staszek
+        )
+
+        # then
+        assert buying_slawek == -9959  # we pay 9999 and get the project for 40
+        assert buying_staszek == 37  # we pay 3 and get the project for 40
 
     @staticmethod
     def simulated_projects() -> SimulatedProjectsBuilder:
