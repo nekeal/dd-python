@@ -24,8 +24,31 @@ class TimeSlot:
         to = end_of_month
         return cls(from_, to)
 
+    def overlaps_with(self, other: "TimeSlot") -> bool:
+        return not self.from_ > other.to and not self.to < other.from_
+
     def within(self, other: "TimeSlot") -> bool:
         return self in other
 
     def __contains__(self, other: "TimeSlot") -> bool:
         return self.from_ <= other.from_ and self.to >= other.to
+
+    def leftover_after_removing_common_with(
+        self, other: "TimeSlot"
+    ) -> list["TimeSlot"]:
+        result: list[TimeSlot] = []
+        if other == self:
+            return []
+        if not self.overlaps_with(other):
+            return [self, other]
+        if self == other:
+            return result
+        if self.from_ < other.from_:
+            result.append(TimeSlot(self.from_, other.from_))
+        if other.from_ < self.from_:
+            result.append(TimeSlot(other.from_, self.from_))
+        if self.to > other.to:
+            result.append(TimeSlot(other.to, self.to))
+        if other.to > self.to:
+            result.append(TimeSlot(self.to, other.to))
+        return result

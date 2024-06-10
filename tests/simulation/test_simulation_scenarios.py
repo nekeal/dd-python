@@ -1,6 +1,7 @@
 import uuid
 
 from smartschedule.optimization.optimization_facade import OptimizationFacade
+from smartschedule.shared.capability.capability import Capability
 from smartschedule.shared.time_slot import TimeSlot
 from smartschedule.simulation.additional_priced_capability import (
     AdditionalPricedCapability,
@@ -8,7 +9,6 @@ from smartschedule.simulation.additional_priced_capability import (
 from smartschedule.simulation.available_resource_capability import (
     AvailableResourceCapability,
 )
-from smartschedule.simulation.capability import Capability
 from smartschedule.simulation.demand import Demand
 from smartschedule.simulation.project_id import ProjectId
 from smartschedule.simulation.simulation_facade import SimulationFacade
@@ -53,7 +53,7 @@ class TestSimulationScenarios:
             .build()
         )
 
-        result = self.simulation_facade.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(  # noqa
+        result = self.simulation_facade.what_is_the_optimal_setup(  # noqa
             simulated_projects, simulated_availability
         )
 
@@ -80,7 +80,7 @@ class TestSimulationScenarios:
             .build()
         )
 
-        result = self.simulation_facade.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(  # noqa E501
+        result = self.simulation_facade.what_is_the_optimal_setup(  # noqa E501
             simulated_projects, simulated_availability
         )
 
@@ -115,10 +115,12 @@ class TestSimulationScenarios:
             uuid.uuid4(), Capability.skill("YT DRAMA COMMENTS"), self.JAN_1
         )
 
-        result_without_extra_resource = self.simulation_facade.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(  # noqa E501
-            simulated_projects, simulated_availability
+        result_without_extra_resource = (
+            self.simulation_facade.what_is_the_optimal_setup(  # noqa E501
+                simulated_projects, simulated_availability
+            )
         )
-        result_with_extra_resource = self.simulation_facade.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(  # noqa E501
+        result_with_extra_resource = self.simulation_facade.what_is_the_optimal_setup(  # noqa E501
             simulated_projects, simulated_availability.add(extra_capability)
         )
 
@@ -145,7 +147,7 @@ class TestSimulationScenarios:
             .build()
         )
 
-        result = self.simulation_facade.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(  # noqa E501
+        result = self.simulation_facade.what_is_the_optimal_setup(  # noqa E501
             simulated_projects, simulated_availability
         )
 

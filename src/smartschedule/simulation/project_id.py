@@ -8,6 +8,10 @@ from uuid import UUID
 class ProjectId:
     project_id: UUID = field(default_factory=uuid.uuid4)
 
+    @classmethod
+    def from_uuid(cls, project_id: UUID) -> "ProjectId":
+        return ProjectId(project_id)
+
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, ProjectId):
             return False

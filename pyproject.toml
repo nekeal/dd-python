@@ -152,6 +152,7 @@ type = "layers"
 layers = [
     "smartschedule.planning.parallelization",
     "smartschedule.simulation",
-    "smartschedule.sorter | smartschedule.optimization"
+    "smartschedule.sorter | smartschedule.optimization",
+    "smartschedule.shared",
 
 ]

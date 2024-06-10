@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from smartschedule.optimization.weight_dimension import WeightDimension
+from smartschedule.shared.capability.capability import Capability
 from smartschedule.shared.time_slot import TimeSlot
 from smartschedule.simulation.available_resource_capability import (
     AvailableResourceCapability,
 )
-from smartschedule.simulation.capability import Capability
 
 
 @dataclass(frozen=True)
